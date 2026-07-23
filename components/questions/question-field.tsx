@@ -39,7 +39,14 @@ export function QuestionField({ question, value, onChange, onAutoAdvance }: Ques
     case "number":
       return <NumberField question={question} value={value as number} onChange={onChange} />;
     case "text":
-      return <TextField question={question} value={value as string} onChange={onChange} />;
+      return (
+        <TextField
+          question={question}
+          value={value as string}
+          onChange={onChange}
+          onAutoAdvance={onAutoAdvance}
+        />
+      );
     case "checkbox":
       return <CheckboxField question={question} value={value as string[]} onChange={onChange} />;
     default:

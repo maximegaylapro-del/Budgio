@@ -55,6 +55,18 @@ describe("childCalculator", () => {
     expect(run({ ageMax: 22, ecole: "superieur" }).breakdown.find((b) => b.id === "scolarite")).toBeDefined();
   });
 
+  it("le scénario par défaut reste dans la fourchette documentée (HCFEA/DREES)", () => {
+    // Défaut : équilibré, ville moyenne, crèche, public, 0→18 ans.
+    // DREES/ONPES situent le coût central autour de 7 000–9 000 €/an, soit
+    // ~130 000–175 000 € au total et ~550–800 €/mois. Garde-fou de calibrage.
+    const r = run({ ageMax: 18 });
+    expect(r.headline.value).toBeGreaterThan(130_000);
+    expect(r.headline.value).toBeLessThan(175_000);
+    const monthly = r.metrics.find((m) => m.id === "monthly")!.value;
+    expect(monthly).toBeGreaterThan(550);
+    expect(monthly).toBeLessThan(800);
+  });
+
   it("génère une série de projection par tranche d'âge", () => {
     const r = run({ ageMax: 18 });
     expect(r.series?.[0]?.type).toBe("bar");

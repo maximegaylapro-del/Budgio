@@ -1,7 +1,8 @@
 import type { SimulatorConfig } from "@/types/simulator";
 import { childCalculator } from "./calculator";
 import { childRecommendations } from "./recommendations";
-import type { ChildAnswers } from "./assumptions";
+import { coutEnfantMethodology } from "./methodology";
+import { CHILD_SOURCES, type ChildAnswers } from "./assumptions";
 
 /** Simulateur « Combien coûte un enfant ? » — première brique de la plateforme. */
 export const coutEnfantConfig: SimulatorConfig<ChildAnswers> = {
@@ -13,7 +14,7 @@ export const coutEnfantConfig: SimulatorConfig<ChildAnswers> = {
   description: "De la naissance à 18 ans, tout compris.",
   tag: "populaire",
   estimatedTime: "2 min",
-  card: { metricLabel: "Estimation moyenne", metricValue: "≈ 9 200 €/an" },
+  card: { metricLabel: "Estimation moyenne", metricValue: "≈ 8 100 €/an" },
 
   intro: {
     eyebrow: "Simulateur",
@@ -85,7 +86,6 @@ export const coutEnfantConfig: SimulatorConfig<ChildAnswers> = {
           title: "Où vivez-vous ?",
           subtitle: "Le coût de la vie varie fortement selon la zone géographique.",
           columns: 3,
-          autoAdvance: true,
           options: [
             { id: "grande", label: "Grande ville", desc: "Paris, Lyon, Marseille…", icon: "building-2" },
             { id: "ville", label: "Ville moyenne", desc: "Urbaine ou périurbaine", icon: "building" },
@@ -104,10 +104,9 @@ export const coutEnfantConfig: SimulatorConfig<ChildAnswers> = {
           title: "Quel mode de garde avant 3 ans ?",
           subtitle: "C'est souvent le poste le plus lourd des premières années.",
           columns: 2,
-          autoAdvance: true,
           options: [
-            { id: "creche", label: "Crèche", desc: "≈ 400 €/mois après aides", icon: "blocks" },
-            { id: "assmat", label: "Assistante maternelle", desc: "≈ 580 €/mois après aides", icon: "user-round" },
+            { id: "creche", label: "Crèche", desc: "≈ 120 €/mois après crédit d'impôt", icon: "blocks" },
+            { id: "assmat", label: "Assistante maternelle", desc: "≈ 288 €/mois après crédit d'impôt", icon: "user-round" },
             { id: "gp", label: "Grands-parents", desc: "Coût très réduit", icon: "users-round" },
             { id: "foyer", label: "Parent au foyer", desc: "Pas de frais de garde", icon: "house" },
           ],
@@ -124,11 +123,10 @@ export const coutEnfantConfig: SimulatorConfig<ChildAnswers> = {
           title: "Quelle scolarité envisagez-vous ?",
           subtitle: "De la maternelle jusqu'aux études supérieures.",
           columns: 3,
-          autoAdvance: true,
           options: [
             { id: "public", label: "Public", desc: "Scolarité gratuite", icon: "school" },
-            { id: "prive", label: "Privé", desc: "≈ 350 €/mois de frais", icon: "landmark" },
-            { id: "superieur", label: "Études sup. incluses", desc: "Coût du supérieur", icon: "graduation-cap" },
+            { id: "prive", label: "Privé sous contrat", desc: "≈ 1 100 €/an de contribution", icon: "landmark" },
+            { id: "superieur", label: "Études sup. incluses", desc: "Soutien parental étudiant", icon: "graduation-cap" },
           ],
         },
       ],
@@ -143,7 +141,6 @@ export const coutEnfantConfig: SimulatorConfig<ChildAnswers> = {
           title: "Quel niveau de dépenses au quotidien ?",
           subtitle: "Alimentation, vêtements, loisirs et vacances.",
           columns: 3,
-          autoAdvance: true,
           options: [
             { id: "econome", label: "Économe", desc: "L'essentiel, maîtrisé", icon: "piggy-bank" },
             { id: "equilibre", label: "Équilibré", desc: "Un bon compromis", icon: "scale" },
@@ -190,14 +187,17 @@ export const coutEnfantConfig: SimulatorConfig<ChildAnswers> = {
     {
       question: "Quelles sources sont utilisées pour cette estimation ?",
       answer:
-        "Le modèle s'appuie sur les données publiques de l'INSEE (dépenses des ménages), de la CAF, du Ministère de l'Éducation et de la DREES.",
+        "Le modèle combine les budgets de référence du rapport « Le coût de l'enfant » du HCFEA (2025, calculs ONPES/DREES), la structure des dépenses de l'Enquête Budget de famille 2017 de l'INSEE, les restes à charge de garde du HCFEA et le coût de la vie étudiante de l'UNEF (2024). Chaque source est liée sous le résultat.",
     },
   ],
 
   sources: [
-    { name: "INSEE", scope: "Dépenses des ménages" },
-    { name: "CAF", scope: "Prestations familiales" },
-    { name: "Ministère de l'Éducation", scope: "Coûts de scolarité" },
-    { name: "DREES", scope: "Santé et petite enfance" },
+    { name: CHILD_SOURCES.hcfea.name, scope: CHILD_SOURCES.hcfea.scope, url: CHILD_SOURCES.hcfea.url },
+    { name: CHILD_SOURCES.drees.name, scope: CHILD_SOURCES.drees.scope, url: CHILD_SOURCES.drees.url },
+    { name: CHILD_SOURCES.insee.name, scope: CHILD_SOURCES.insee.scope, url: CHILD_SOURCES.insee.url },
+    { name: CHILD_SOURCES.unef.name, scope: CHILD_SOURCES.unef.scope, url: CHILD_SOURCES.unef.url },
+    { name: CHILD_SOURCES.prive.name, scope: CHILD_SOURCES.prive.scope, url: CHILD_SOURCES.prive.url },
   ],
+
+  methodology: coutEnfantMethodology,
 };

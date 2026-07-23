@@ -7,8 +7,15 @@ import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { ProgressBar } from "@/components/ui/progress-bar";
 import { Icon } from "@/components/shared/icon";
 
+interface SimulatorTopbarProps {
+  progress: Progress;
+  showProgress: boolean;
+  /** Si fourni, la croix ferme l'overlay ; sinon elle renvoie à l'accueil. */
+  onClose?: () => void;
+}
+
 /** Barre supérieure du wizard : progression + fermeture. */
-export function SimulatorTopbar({ progress, showProgress }: { progress: Progress; showProgress: boolean }) {
+export function SimulatorTopbar({ progress, showProgress, onClose }: SimulatorTopbarProps) {
   return (
     <header
       className="sticky top-0 z-20 border-b border-border backdrop-blur-[14px] backdrop-saturate-[180%]"
@@ -28,13 +35,24 @@ export function SimulatorTopbar({ progress, showProgress }: { progress: Progress
             Enregistré
           </span>
           <ThemeToggle />
-          <Link
-            href="/"
-            aria-label="Fermer"
-            className="flex h-9 w-9 items-center justify-center rounded-md border border-border bg-bg-elev text-fg-muted hover:border-border-strong"
-          >
-            <Icon name="x" size={18} strokeWidth={2} />
-          </Link>
+          {onClose ? (
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Fermer le simulateur"
+              className="flex h-9 w-9 items-center justify-center rounded-md border border-border bg-bg-elev text-fg-muted hover:border-border-strong"
+            >
+              <Icon name="x" size={18} strokeWidth={2} />
+            </button>
+          ) : (
+            <Link
+              href="/"
+              aria-label="Fermer"
+              className="flex h-9 w-9 items-center justify-center rounded-md border border-border bg-bg-elev text-fg-muted hover:border-border-strong"
+            >
+              <Icon name="x" size={18} strokeWidth={2} />
+            </Link>
+          )}
         </div>
       </div>
     </header>

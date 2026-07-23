@@ -107,6 +107,41 @@ export interface ResultLayout {
   heroSubtitle?: (answers: Answers) => string;
 }
 
+/* ─────────────────────── Page de contenu « Méthodologie » ─────────────── */
+
+export interface MethodologyBlock {
+  heading: string;
+  paragraphs: string[];
+}
+
+/** Une hypothèse chiffrée présentée de façon lisible. */
+export interface MethodologyAssumption {
+  label: string;
+  value: string;
+  note?: string;
+}
+
+/**
+ * Contenu de la page « Comment est calculé … ? » d'un simulateur.
+ * Page de fond (méthodologie / hypothèses / limites / sources), pensée SEO.
+ */
+export interface MethodologyContent {
+  /** H1 & <title>, ex. « Comment est calculé le coût d'un enfant ? ». */
+  title: string;
+  /** meta description. */
+  description: string;
+  /** Paragraphes d'introduction. */
+  intro: string[];
+  /** Sections explicatives du modèle. */
+  method: MethodologyBlock[];
+  /** Table des hypothèses chiffrées. */
+  assumptions: MethodologyAssumption[];
+  /** Limites assumées du modèle. */
+  limits: string[];
+  /** Date de dernière mise à jour, ex. « juillet 2026 ». */
+  updated: string;
+}
+
 /* ──────────────────────────── Config globale ─────────────────────────── */
 
 /**
@@ -139,6 +174,8 @@ export interface SimulatorConfig<
   seo: SeoConfig;
   faq?: Faq[];
   sources: Source[];
+  /** Page de contenu « Comment est calculé … ? » (optionnelle). */
+  methodology?: MethodologyContent;
 }
 
 /** Type utilitaire : n'importe quel simulateur, quelles que soient ses génériques. */

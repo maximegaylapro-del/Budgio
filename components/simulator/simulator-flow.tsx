@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useSimulator } from "@/hooks/use-simulator";
 import { getSimulator } from "@/config/registry";
 import { CATEGORY_LABELS } from "@/config/categories";
@@ -8,24 +9,33 @@ import { SimulatorIntro } from "./simulator-intro";
 import { QuestionScreen } from "./question-screen";
 import { ResultView } from "./result-view";
 
-/**
- * Orchestrateur générique d'un simulateur.
- * Reçoit uniquement le `slug` (les fonctions de la config ne peuvent pas
- * traverser la frontière RSC) et résout la config depuis le registre, qui est
- * du TS pur exécutable côté client. Délègue ensuite à l'écran de la phase.
- */
-export function SimulatorRenderer({ slug }: { slug: string }) {
-  const config = getSimulator(slug);
-  if (!config) return null;
-  return <SimulatorRuntime config={config} />;
+interface SimulatorFlowProps {
+  config: NonNullable<ReturnType<typeof getSimulator>>;
+  onClose?: () => void;
+  /** Démarre directement aux questions (l'intro vit sur la landing SEO). */
+  autoStart?: boolean;
 }
 
-function SimulatorRuntime({ config }: { config: NonNullable<ReturnType<typeof getSimulator>> }) {
+/**
+ * Déroulé interactif d'un simulateur (intro → questions → résultat).
+ * Générique : piloté par la config, ignore quel simulateur il exécute.
+ */
+export function SimulatorFlow({ config, onClose, autoStart = true }: SimulatorFlowProps) {
   const sim = useSimulator(config);
+
+  useEffect(() => {
+    if (autoStart) sim.start();
+    // Démarrage unique au montage.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="min-h-screen bg-bg">
-      <SimulatorTopbar progress={sim.progress} showProgress={sim.phase === "question"} />
+      <SimulatorTopbar
+        progress={sim.progress}
+        showProgress={sim.phase === "question"}
+        onClose={onClose}
+      />
 
       {sim.phase === "intro" ? (
         <SimulatorIntro

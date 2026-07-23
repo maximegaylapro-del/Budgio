@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllSimulators } from "@/config/registry";
 import { getSimulatorsByCategory } from "@/config/registry";
@@ -9,6 +10,13 @@ import { Hero } from "@/components/home/hero";
 import { Methodology } from "@/components/home/methodology";
 import { SimulatorCard } from "@/components/shared/simulator-card";
 import { Icon } from "@/components/shared/icon";
+import { SITE } from "@/lib/seo/site";
+
+export const metadata: Metadata = {
+  title: { absolute: "Budgio — Estimez le coût de vos grandes décisions" },
+  description: SITE.description,
+  alternates: { canonical: SITE.url },
+};
 
 export default function HomePage() {
   const popular = getAllSimulators().slice(0, 8);
