@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useSimulator } from "@/hooks/use-simulator";
 import { getSimulator } from "@/config/registry";
 import { CATEGORY_LABELS } from "@/config/categories";
+import { track, setAnalyticsTag } from "@/lib/analytics";
 import { SimulatorTopbar } from "./simulator-topbar";
 import { SimulatorIntro } from "./simulator-intro";
 import { QuestionScreen } from "./question-screen";
@@ -22,12 +23,40 @@ interface SimulatorFlowProps {
  */
 export function SimulatorFlow({ config, onClose, autoStart = true }: SimulatorFlowProps) {
   const sim = useSimulator(config);
+  const lastStepRef = useRef<string | null>(null);
+  const completedRef = useRef(false);
 
   useEffect(() => {
     if (autoStart) sim.start();
+    setAnalyticsTag("simulateur", config.slug);
+    track({ name: "simulator_start", props: { slug: config.slug } });
     // Démarrage unique au montage.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Funnel : une étape franchie = un événement (jusqu'où les gens remplissent).
+  useEffect(() => {
+    if (sim.phase === "question" && sim.currentGroup) {
+      const key = `${sim.state.stepIndex}:${sim.currentGroup.id}`;
+      if (lastStepRef.current !== key) {
+        lastStepRef.current = key;
+        track({
+          name: "simulator_step",
+          props: {
+            slug: config.slug,
+            step: sim.state.stepIndex + 1,
+            total: sim.totalSteps,
+            step_id: sim.currentGroup.id,
+          },
+        });
+      }
+    }
+    if (sim.phase === "result" && !completedRef.current) {
+      completedRef.current = true;
+      track({ name: "simulator_complete", props: { slug: config.slug } });
+    }
+    if (sim.phase !== "result") completedRef.current = false;
+  }, [sim.phase, sim.state.stepIndex, sim.currentGroup, sim.totalSteps, config.slug]);
 
   return (
     <div className="min-h-screen bg-bg">
@@ -64,7 +93,10 @@ export function SimulatorFlow({ config, onClose, autoStart = true }: SimulatorFl
           config={config}
           result={sim.finalResult}
           answers={sim.answers}
-          onRestart={sim.restart}
+          onRestart={() => {
+            track({ name: "simulator_restart", props: { slug: config.slug } });
+            sim.restart();
+          }}
         />
       ) : null}
     </div>

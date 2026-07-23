@@ -1,6 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/layout/theme-provider";
+import { ConsentProvider } from "@/components/consent/consent-provider";
+import { ConsentBanner } from "@/components/consent/consent-banner";
+import { Analytics } from "@/components/analytics/analytics";
 import { SITE } from "@/lib/seo/site";
 import "./globals.css";
 
@@ -35,7 +38,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="fr" suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable}`}>
       <body suppressHydrationWarning>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <ConsentProvider>
+            {children}
+            <ConsentBanner />
+            <Analytics />
+          </ConsentProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

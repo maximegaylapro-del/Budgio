@@ -50,6 +50,23 @@ metadata, le JSON-LD et la home se mettent à jour automatiquement.
 `cout-enfant` — « Combien coûte un enfant ? » (modèle porté depuis la maquette,
 hypothèses INSEE/CAF externalisées dans `assumptions.ts`).
 
+## Analytics
+
+Google Analytics 4 et Microsoft Clarity sont branchés derrière une abstraction
+(`lib/analytics`), **sans dépendance forte** : les scripts ne se chargent que si
+leurs IDs sont fournis (`.env`). Copier `.env.example` → `.env.local` et renseigner :
+
+- `NEXT_PUBLIC_GA_ID` (GA4, `G-XXXX`) — mesure quantitative, funnel.
+- `NEXT_PUBLIC_CLARITY_ID` — heatmaps et enregistrements de session.
+
+Le simulateur émet des événements de tunnel : `simulator_start`, `simulator_step`
+(avec l'étape atteinte), `simulator_complete`, `simulator_restart` — pour voir où
+les gens bloquent et jusqu'où ils remplissent.
+
+Conformité RGPD : un **bandeau de consentement** (`components/consent`) bloque le
+chargement des scripts tant que l'utilisateur n'a pas accepté. Le choix est
+persisté et modifiable depuis la page `/confidentialite`.
+
 ## Évolutions prévues (sans refonte)
 
 API (`app/api/` réservé), base PostgreSQL (via accessors `lib/data/`),
