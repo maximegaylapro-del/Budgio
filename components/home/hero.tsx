@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { Icon } from "@/components/shared/icon";
 import { getAllSimulators } from "@/config/registry";
+import { SimulatorSearch } from "./simulator-search";
 
-/** Hero de la home : accroche + barre de recherche (lien vers l'index). */
+/** Hero de la home : accroche + recherche de simulateurs. */
 export function Hero() {
   const chips = getAllSimulators().slice(0, 7);
   return (
@@ -23,19 +23,7 @@ export function Hero() {
           chiffrées, projetées sur plusieurs années et adaptées à votre situation.
         </p>
 
-        <Link
-          href="/simulateurs"
-          className="mx-auto mt-9 flex max-w-[700px] items-center gap-[10px] rounded-xl border border-border-strong bg-bg-elev py-[11px] pl-[22px] pr-[11px] shadow-lg transition-colors hover:border-accent-border"
-        >
-          <Icon name="search" size={22} className="text-fg-subtle" />
-          <span className="flex-1 text-left text-[18px] text-fg-subtle">
-            Que souhaitez-vous estimer aujourd’hui ?
-          </span>
-          <span className="flex items-center gap-[7px] rounded-lg bg-accent px-[22px] py-3 text-[15px] font-semibold text-on-accent">
-            Estimer
-            <Icon name="arrow-right" size={17} strokeWidth={2.1} />
-          </span>
-        </Link>
+        <SimulatorSearch />
 
         <div className="mx-auto mt-4 flex max-w-[720px] flex-wrap justify-center gap-2">
           <span className="self-center text-[13px] text-fg-subtle">Populaire :</span>
