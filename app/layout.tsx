@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/components/layout/theme-provider";
 import { ConsentProvider } from "@/components/consent/consent-provider";
 import { ConsentBanner } from "@/components/consent/consent-banner";
 import { Analytics } from "@/components/analytics/analytics";
+import { VercelAnalytics } from "@/components/analytics/vercel-analytics";
 import { SITE } from "@/lib/seo/site";
 import "./globals.css";
 
@@ -46,6 +47,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Analytics />
           </ConsentProvider>
         </ThemeProvider>
+        {/* Cookieless — hors consentement */}
+        <VercelAnalytics />
       </body>
     </html>
   );
