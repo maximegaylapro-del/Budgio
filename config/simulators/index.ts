@@ -2,6 +2,7 @@ import type { AnySimulatorConfig } from "@/types/simulator";
 import { defineSimulator } from "@/lib/engine/define-simulator";
 import { coutEnfantConfig } from "./cout-enfant/config";
 import { coutVoitureConfig } from "./cout-voiture/config";
+import { capaciteAchatConfig } from "./capacite-achat/config";
 
 /**
  * Liste des simulateurs enregistrés.
@@ -11,4 +12,5 @@ import { coutVoitureConfig } from "./cout-voiture/config";
 export const SIMULATORS: AnySimulatorConfig[] = [
   defineSimulator(coutEnfantConfig),
   defineSimulator(coutVoitureConfig),
+  defineSimulator(capaciteAchatConfig),
 ];
