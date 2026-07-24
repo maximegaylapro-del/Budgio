@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 
-export const size = { width: 32, height: 32 };
+// 48×48 : taille minimale recommandée par Google pour l'afficher dans les résultats.
+export const size = { width: 48, height: 48 };
 export const contentType = "image/png";
 
 /** Favicon (onglet navigateur, favoris, résultats Google) — le « B » de marque. */
@@ -14,10 +15,10 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          borderRadius: 7,
+          borderRadius: 11,
           background: "linear-gradient(140deg, #6d5efc, #b4a7ff)",
           color: "#ffffff",
-          fontSize: 23,
+          fontSize: 34,
           fontWeight: 700,
         }}
       >
