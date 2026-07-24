@@ -98,13 +98,13 @@ export const CHILD_ASSUMPTIONS = {
    * Structure inspirée de l'INSEE, Enquête Budget de famille 2017. Source : [insee].
    */
   baseSplit: [
-    { id: "logement", label: "Logement", share: 0.22 },
-    { id: "alimentation", label: "Alimentation", share: 0.18 },
-    { id: "loisirs", label: "Loisirs & vacances", share: 0.15 },
-    { id: "transport", label: "Transport", share: 0.13 },
-    { id: "autres", label: "Autres", share: 0.18 },
-    { id: "vetements", label: "Vêtements", share: 0.08 },
-    { id: "sante", label: "Santé", share: 0.06 },
+    { id: "logement", label: "Logement", share: 0.22, icon: "home" },
+    { id: "alimentation", label: "Alimentation", share: 0.18, icon: "utensils" },
+    { id: "loisirs", label: "Loisirs & vacances", share: 0.15, icon: "ferris-wheel" },
+    { id: "transport", label: "Transport", share: 0.13, icon: "car" },
+    { id: "autres", label: "Autres", share: 0.18, icon: "package" },
+    { id: "vetements", label: "Vêtements", share: 0.08, icon: "shirt" },
+    { id: "sante", label: "Santé", share: 0.06, icon: "heart-pulse" },
   ],
 
   /** Tranches d'âge affichées dans le graphique de projection. */

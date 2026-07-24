@@ -24,7 +24,7 @@ export interface Metric {
   hint?: string;
 }
 
-/** Un poste de dépense — alimente le donut + la liste de répartition. */
+/** Un poste de dépense — alimente la barre empilée + la légende de répartition. */
 export interface BreakdownItem {
   id: string;
   label: string;
@@ -33,6 +33,8 @@ export interface BreakdownItem {
   pct: number;
   /** Index dans l'échelle data-viz indigo. */
   colorIndex: number;
+  /** Icône Lucide optionnelle pour la légende. */
+  icon?: LucideIconName;
 }
 
 export type SeriesType = "bar" | "line" | "area" | "pie";

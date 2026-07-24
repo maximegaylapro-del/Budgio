@@ -53,9 +53,9 @@ export const childCalculator: Calculator<ChildAnswers> = {
 
     // Postes de dépense : ventilation du socle + garde + scolarité.
     const breakdown = buildBreakdown([
-      ...A.baseSplit.map((s) => ({ id: s.id, label: s.label, value: baseSum * s.share })),
-      { id: "garde", label: "Garde", value: garde },
-      { id: "scolarite", label: "Scolarité", value: scol },
+      ...A.baseSplit.map((s) => ({ id: s.id, label: s.label, value: baseSum * s.share, icon: s.icon })),
+      { id: "garde", label: "Garde", value: garde, icon: "baby" },
+      { id: "scolarite", label: "Scolarité", value: scol, icon: "graduation-cap" },
     ]);
 
     // Série de projection par tranche d'âge.

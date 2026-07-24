@@ -1,10 +1,12 @@
 import type { BreakdownItem } from "@/types/calculation";
+import type { LucideIconName } from "@/types/common";
 import { sum } from "@/lib/formulas";
 
 interface RawItem {
   id: string;
   label: string;
   value: number;
+  icon?: LucideIconName;
 }
 
 /**
@@ -23,5 +25,6 @@ export function buildBreakdown(items: RawItem[]): BreakdownItem[] {
       value: item.value,
       pct: (item.value / total) * 100,
       colorIndex: index,
+      icon: item.icon,
     }));
 }
