@@ -1,5 +1,5 @@
 import type { Calculator } from "@/lib/calculators/types";
-import type { CalculationInput, CalculationResult, ChartSeries } from "@/types/calculation";
+import type { CalculationInput, CalculationResult, ChartSeries, Insight } from "@/types/calculation";
 import { buildBreakdown } from "@/lib/calculators/helpers";
 import { formatCurrency } from "@/lib/utils/format";
 import { CHILD_ASSUMPTIONS as A, type ChildAnswers } from "./assumptions";
@@ -74,6 +74,32 @@ export const childCalculator: Calculator<ChildAnswers> = {
       total,
     )}, soit ${formatCurrency(monthly)} par mois en moyenne.`;
 
+    // « Ce qu'il faut retenir » — conclusions en langage naturel.
+    const takeaways: Insight[] = [];
+    const top = breakdown[0];
+    if (top) {
+      takeaways.push({
+        id: "top-poste",
+        icon: top.icon ?? "wallet",
+        text: `${top.label} est votre premier poste de dépense (${Math.round(top.pct)} % du total).`,
+      });
+    }
+    // Escalade adolescence : compare la dernière tranche pleine à la première.
+    const firstBand = bandPoints[0];
+    const teenBand = bandPoints.find((p) => p.x === "15–18 ans") ?? bandPoints[bandPoints.length - 1];
+    if (firstBand && teenBand && teenBand.y > firstBand.y * 1.15) {
+      takeaways.push({
+        id: "escalade-ado",
+        icon: "graduation-cap",
+        text: "Les dépenses augmentent nettement à l'adolescence, à anticiper dans votre budget.",
+      });
+    }
+    takeaways.push({
+      id: "moyenne-mensuelle",
+      icon: "coins",
+      text: `En moyenne, cela représente environ ${formatCurrency(monthly)} par mois pendant ${years} ans.`,
+    });
+
     return {
       headline: { id: "total", label: "Coût total estimé", value: total, format: "currency" },
       metrics: [
@@ -84,6 +110,7 @@ export const childCalculator: Calculator<ChildAnswers> = {
       breakdown,
       series,
       summary,
+      takeaways,
     };
   },
 };

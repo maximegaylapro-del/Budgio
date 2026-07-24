@@ -5,8 +5,8 @@ import {
   UsersRound, GraduationCap, School, Landmark, PiggyBank, Scale, Gem, Wallet, Smile, Cake,
   Info, Sparkles, X, Check, RotateCcw, GitCompare, Share2, BadgePercent, Gift, ListChecks,
   FunctionSquare, Settings2, Copy, Layers, Smartphone, Tablet, Monitor, Moon, Star, Coins,
-  Receipt, Calculator, Utensils, FerrisWheel, Package, Shirt, HeartPulse, Circle,
-  type LucideIcon,
+  Receipt, Calculator, Utensils, FerrisWheel, Package, Shirt, HeartPulse, Download, Link2,
+  Circle, type LucideIcon,
 } from "lucide-react";
 import type { LucideIconName } from "@/types/common";
 import { cn } from "@/lib/utils/cn";
@@ -28,6 +28,7 @@ const REGISTRY: Record<string, LucideIcon> = {
   smartphone: Smartphone, tablet: Tablet, monitor: Monitor, moon: Moon, star: Star,
   coins: Coins, receipt: Receipt, calculator: Calculator, utensils: Utensils,
   "ferris-wheel": FerrisWheel, package: Package, shirt: Shirt, "heart-pulse": HeartPulse,
+  download: Download, link: Link2,
 };
 
 interface IconProps {

@@ -99,7 +99,13 @@ export interface IntroConfig {
 }
 
 /** Blocs de la page de résultat à afficher, dans l'ordre. */
-export type ResultBlock = "hero" | "breakdown" | "charts" | "recommendations" | "sources";
+export type ResultBlock =
+  | "hero"
+  | "takeaways"
+  | "breakdown"
+  | "charts"
+  | "recommendations"
+  | "sources";
 
 export interface ResultLayout {
   blocks: ResultBlock[];

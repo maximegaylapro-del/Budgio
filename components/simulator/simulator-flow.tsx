@@ -15,20 +15,27 @@ interface SimulatorFlowProps {
   onClose?: () => void;
   /** Démarre directement aux questions (l'intro vit sur la landing SEO). */
   autoStart?: boolean;
+  /** Réponses issues d'un lien partagé : le déroulé s'ouvre direct au résultat. */
+  seededAnswers?: import("@/types/calculation").Answers;
 }
 
 /**
  * Déroulé interactif d'un simulateur (intro → questions → résultat).
  * Générique : piloté par la config, ignore quel simulateur il exécute.
  */
-export function SimulatorFlow({ config, onClose, autoStart = true }: SimulatorFlowProps) {
-  const sim = useSimulator(config);
+export function SimulatorFlow({ config, onClose, autoStart = true, seededAnswers }: SimulatorFlowProps) {
+  const sim = useSimulator(config, seededAnswers);
   const lastStepRef = useRef<string | null>(null);
   const completedRef = useRef(false);
 
   useEffect(() => {
-    if (autoStart) sim.start();
     setAnalyticsTag("simulateur", config.slug);
+    if (seededAnswers) {
+      // Vue d'un résultat partagé — pas un démarrage classique.
+      track({ name: "shared_view", props: { slug: config.slug } });
+      return;
+    }
+    if (autoStart) sim.start();
     track({ name: "simulator_start", props: { slug: config.slug } });
     // Démarrage unique au montage.
     // eslint-disable-next-line react-hooks/exhaustive-deps

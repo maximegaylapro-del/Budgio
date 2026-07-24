@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { getSimulator } from "@/config/registry";
+import { decodeAnswers } from "@/lib/utils/share";
 import { SimulatorFlow } from "./simulator-flow";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/shared/icon";
@@ -21,6 +22,17 @@ interface SimulatorLauncherProps {
 export function SimulatorLauncher({ slug, label = "Commencer l'estimation", className }: SimulatorLauncherProps) {
   const [open, setOpen] = useState(false);
   const config = getSimulator(slug);
+
+  // Lien partagé : réponses encodées dans ?s= → on ouvre direct au résultat.
+  const seededAnswers = useMemo(() => {
+    if (typeof window === "undefined") return undefined;
+    const param = new URLSearchParams(window.location.search).get("s");
+    return param ? (decodeAnswers(param) ?? undefined) : undefined;
+  }, []);
+
+  useEffect(() => {
+    if (seededAnswers) setOpen(true);
+  }, [seededAnswers]);
 
   // Verrouille le scroll de la page sous l'overlay.
   useEffect(() => {
@@ -53,7 +65,7 @@ export function SimulatorLauncher({ slug, label = "Commencer l'estimation", clas
 
       {open ? (
         <div role="dialog" aria-modal="true" aria-label={config.title} className="fixed inset-0 z-50 animate-fadeIn overflow-y-auto bg-bg">
-          <SimulatorFlow config={config} onClose={() => setOpen(false)} />
+          <SimulatorFlow config={config} seededAnswers={seededAnswers} onClose={() => setOpen(false)} />
         </div>
       ) : null}
     </>

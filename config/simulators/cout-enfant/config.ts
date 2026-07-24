@@ -155,7 +155,7 @@ export const coutEnfantConfig: SimulatorConfig<ChildAnswers> = {
   recommendations: childRecommendations,
 
   result: {
-    blocks: ["hero", "breakdown", "charts", "recommendations", "sources"],
+    blocks: ["hero", "takeaways", "breakdown", "charts", "recommendations", "sources"],
     heroSubtitle: (answers) => {
       const name = String(answers.name ?? "");
       const ageMax = Number(answers.ageMax ?? 18);

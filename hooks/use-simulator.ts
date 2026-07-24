@@ -24,20 +24,24 @@ function withRecommendations(
   for (const rule of config.recommendations) {
     if (rule.when(result, answers)) recs.push(rule.build(result, answers));
   }
-  return { ...result, recommendations: recs };
+  return { ...result, recommendations: recs.slice(0, 4) };
 }
 
-export function useSimulator(config: AnySimulatorConfig) {
+export function useSimulator(config: AnySimulatorConfig, seededAnswers?: Answers) {
   const storageKey = `budgio_${config.slug}_v1`;
 
   const [state, rawDispatch] = useReducer(
     (s: MachineState, a: MachineAction) => reducer(s, a, currentTotal(config, s.answers)),
-    config.defaults,
-    initState,
+    seededAnswers,
+    (seed) =>
+      seed
+        ? { phase: "result" as const, stepIndex: 0, answers: { ...config.defaults, ...seed } }
+        : initState(config.defaults),
   );
 
-  // Réhydratation depuis localStorage (une fois monté).
+  // Réhydratation depuis localStorage — ignorée si les réponses viennent d'un lien partagé.
   useEffect(() => {
+    if (seededAnswers) return;
     try {
       const raw = localStorage.getItem(storageKey);
       if (!raw) return;
@@ -53,14 +57,15 @@ export function useSimulator(config: AnySimulatorConfig) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [storageKey]);
 
-  // Persistance à chaque changement.
+  // Persistance à chaque changement — pas en mode lien partagé (ne pas écraser sa propre session).
   useEffect(() => {
+    if (seededAnswers) return;
     try {
       localStorage.setItem(storageKey, JSON.stringify({ answers: state.answers }));
     } catch {
       /* ignore */
     }
-  }, [state.answers, storageKey]);
+  }, [state.answers, storageKey, seededAnswers]);
 
   const groups = useMemo(() => visibleGroups(config.groups, state.answers), [config, state.answers]);
   const totalSteps = groups.length;

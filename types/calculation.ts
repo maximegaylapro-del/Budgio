@@ -59,6 +59,13 @@ export interface Recommendation {
   body: string;
 }
 
+/** Fait marquant à retenir — langage naturel, pour « Ce qu'il faut retenir ». */
+export interface Insight {
+  id: string;
+  icon: LucideIconName;
+  text: string;
+}
+
 /** Résultat normalisé — indépendant du simulateur, consommé par le renderer. */
 export interface CalculationResult {
   /** Le grand chiffre (coût total). */
@@ -71,6 +78,8 @@ export interface CalculationResult {
   series?: ChartSeries[];
   /** Commentaire automatique en langage naturel. */
   summary: string;
+  /** Faits marquants « Ce qu'il faut retenir » (rempli par le calculateur). */
+  takeaways?: Insight[];
   /** Conseils personnalisés (rempli par le moteur d'un simulateur). */
   recommendations?: Recommendation[];
 }
