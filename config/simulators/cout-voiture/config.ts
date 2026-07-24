@@ -31,7 +31,7 @@ export const coutVoitureConfig: SimulatorConfig<CarAnswers> = {
 
   defaults: {
     motorisation: "essence",
-    prix: 22000,
+    prix: 18000,
     etat: "occasion_recente",
     km: 13000,
     duree: 5,

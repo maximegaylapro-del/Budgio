@@ -52,11 +52,13 @@ describe("carCalculator", () => {
     expect(run({}).breakdown.find((b) => b.id === "depreciation")).toBeDefined();
   });
 
-  it("le coût par an du défaut est dans une fourchette réaliste (3 000–8 000 €)", () => {
+  it("le coût par an du défaut colle aux études budget auto (~5 000 €/an)", () => {
+    // Occasion récente, essence, 13 000 km/an : les études 2025 situent le coût
+    // moyen autour de 5 000 €/an (416 €/mois). Garde-fou de calibrage.
     const r = run({});
     const annual = r.metrics.find((m) => m.id === "annual")!.value;
-    expect(annual).toBeGreaterThan(3000);
-    expect(annual).toBeLessThan(8000);
+    expect(annual).toBeGreaterThan(3800);
+    expect(annual).toBeLessThan(6200);
   });
 
   it("génère une série coût par année", () => {

@@ -7,7 +7,7 @@ import { CAR_ASSUMPTIONS as A, type CarAnswers } from "./assumptions";
 function normalize(answers: CalculationInput<CarAnswers>["answers"]): CarAnswers {
   return {
     motorisation: (answers.motorisation as CarAnswers["motorisation"]) ?? "essence",
-    prix: Number(answers.prix ?? 22000),
+    prix: Number(answers.prix ?? 18000),
     etat: (answers.etat as CarAnswers["etat"]) ?? "occasion_recente",
     km: Number(answers.km ?? 13000),
     duree: Number(answers.duree ?? 5),
